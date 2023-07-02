@@ -11,7 +11,6 @@ import errno
 
 
 def get_csv_by_bot():
-
     prefs = {
         "download.default_directory": r"C:\Calyx-TrabajoPracticoFinal\data",
         "download.directory_upgrade": True,
@@ -58,11 +57,10 @@ def get_csv_by_bot():
 
 
 def create_or_exists():
-    if __name__ == "__main__":
-        try:
-            os.mkdir('data')
-        except OSError as e:
-            if e.errno != errno.EEXIST:raise
+    try:
+        os.mkdir('data')
+    except OSError as e:
+        if e.errno != errno.EEXIST:raise
 
 
 if __name__ == "__main__":
