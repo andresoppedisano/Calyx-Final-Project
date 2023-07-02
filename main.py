@@ -48,9 +48,9 @@ def get_csv_by_bot():
         EC.presence_of_element_located((By.XPATH, "//*[@id='pkg-resources']/div[1]/div/a[2]"))
     )
         
-    HREF = download_dataset.get_attribute("href")
+    href = download_dataset.get_attribute("href")
         
-    driver.get(HREF)
+    driver.get(href)
     time.sleep(5)
 
     driver.close()
