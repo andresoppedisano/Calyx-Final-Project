@@ -23,7 +23,7 @@ def get_csv_by_bot():
 
     driver = webdriver.Chrome(service=service, options=chromeOptions)
 
-    LOGIN_TIMEOUT = 20
+    LOGIN_TIMEOUT = 30
     URL = "https://www.datos.gob.ar"
 
     driver.get(URL)
@@ -32,26 +32,28 @@ def get_csv_by_bot():
         EC.presence_of_element_located((By.XPATH, "//a[@class='header-link']"))
     )
     datasets.click()
-    time.sleep(5)
+    time.sleep(2)
+
     search_dataset = WebDriverWait(driver, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located((By.XPATH, "//input[@name='q']"))
     )
     search_dataset.send_keys("Transferencias de autos", Keys.ENTER)
-    time.sleep(5)
+    time.sleep(2)
 
     select_dataset = WebDriverWait(driver, LOGIN_TIMEOUT).until(
-        EC.presence_of_element_located((By.XPATH, "//*[@id='search-results']/div[1]/a[4]/div/div/div/div[1]/h3"))
+        EC.presence_of_element_located((By.XPATH, "//div/a/div/div/div/div/h3[contains(text(),'Transferencias de autos')]"))
     )
     select_dataset.click()
+    time.sleep(2)
 
     download_dataset = WebDriverWait(driver, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located((By.XPATH, "//*[@id='pkg-resources']/div[1]/div/a[2]"))
     )
-        
+    
     href = download_dataset.get_attribute("href")
-        
+    time.sleep(10)
     driver.get(href)
-    time.sleep(5)
+    time.sleep(10)
 
     driver.close()
 
