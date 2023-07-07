@@ -1,5 +1,4 @@
 import pandas as pd
-import numpy as np
 import sqlite3
 
 
@@ -14,17 +13,25 @@ df2 = df[(df["registro_seccional_codigo"] == 1216) & (df["automotor_origen"] == 
 # join sets
 df_concat = pd.concat([df1, df2], axis=0)
 
-# create 'id' and 'code'
-df_concat['id']=np.arange(len(df_concat))
+# create 'id' and 'code_number' (code_number uses the index of each row)
+df_concat.insert(0, 'id', range(len(df_concat)))
+df_concat.insert(0, 'code_number', range(1, len(df_concat) + 1))
 
 # choose the necessary columns
-df_final = df_concat[["id","registro_seccional_provincia","titular_domicilio_provincia_id","titular_pais_nacimiento_id"]]
+df_final_province = df_concat[["id","registro_seccional_provincia","titular_domicilio_provincia_id","titular_pais_nacimiento_id"]]
+df_final_country = df_concat[["id","titular_pais_nacimiento_id","titular_pais_nacimiento"]]
+df_final_procedure = df_concat[["id","code_number","tramite_tipo", "titular_domicilio_provincia_id"]]
 conn = sqlite3.connect('sqlite.db')
 cursor = conn.cursor()
 
 # Save the data generated in the sub dataset in the database.
+table_province = list(df_final_province.itertuples(index=False, name=None))
+table_country = list(df_final_country.itertuples(index=False, name=None))
+table_procedure = list(df_final_procedure.itertuples(index=False, name=None))
 
-data = list(df_final.itertuples(index=False, name=None))
-cursor.executemany("Insert Into Provinces Values (?, ?, ?, ?)", data)
+cursor.executemany("Insert Into Provinces Values (?, ?, ?, ?)", table_province)
+cursor.executemany("Insert Into Countries Values (?, ?, ?)", table_country)
+cursor.executemany("Insert Into Procedures Values (?, ?, ?, ?)", table_procedure)
+
 conn.commit()
 conn.close()
