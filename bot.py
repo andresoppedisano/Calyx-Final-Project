@@ -49,7 +49,7 @@ def get_csv_by_bot():
     download_dataset = WebDriverWait(driver, LOGIN_TIMEOUT).until(
         EC.presence_of_element_located((By.XPATH, "//*[@id='pkg-resources']/div[1]/div/a[2]"))
     )
-    
+
     href = download_dataset.get_attribute("href")
     time.sleep(10)
     driver.get(href)
@@ -58,7 +58,7 @@ def get_csv_by_bot():
     driver.close()
 
 
-def create_or_exists():
+def create_or_exists_folder_data():
     try:
         os.mkdir('data')
     except OSError as e:
@@ -66,5 +66,5 @@ def create_or_exists():
 
 
 if __name__ == "__main__":
-    create_or_exists()
+    create_or_exists_folder_data()
     get_csv_by_bot()
