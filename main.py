@@ -34,6 +34,13 @@ def read_province(code: str, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Province not found")
     return db_prov
 
+@app.get("/provinces/{code}/procedures", response_model=schemas.ProvinceQuantity)
+def read_procedures_quantity_by_province(code: str, db: Session = Depends(get_db)):
+    procedure_quantity = crud.get_procedure_quantity_by_province_code(db, code)
+    if procedure_quantity is None:
+        raise HTTPException(status_code=404, detail="Code not found")
+    return schemas.ProvinceQuantity(province_code=code, procedure_quantity=procedure_quantity)
+
 # Country
 @app.post("/countries/", response_model=schemas.Country)
 def create_country(coun: schemas.CountryCreate, db: Session = Depends(get_db)):
