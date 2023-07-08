@@ -18,6 +18,10 @@ class Province(ProvinceBase):
     class Config:
         orm_mode = True
 
+class ProvinceQuantity(BaseModel):
+    province_code: str
+    procedure_quantity: int
+
 # Country
 class CountryBase(BaseModel):
     name: str

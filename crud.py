@@ -18,6 +18,13 @@ def create_province(db: Session, prov: schemas.ProvinceCreate):
     db.refresh(db_prov)
     return db_prov
 
+def get_procedure_quantity_by_province_code(db: Session, code: str) -> int:
+    province = db.query(models.Province).filter(models.Province.code == code).first()
+    if province is None:
+        return None
+    procedure_quantity = db.query(models.Procedure).filter(models.Procedure.province_code == code).count()
+    return procedure_quantity
+
 # Country
 def get_countries(db: Session, skip: int = 0, limit: int = 100):
     query = db.query(models.Country).offset(skip).limit(limit)
