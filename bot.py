@@ -7,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver import ChromeOptions
 import time
 import os
-import errno
+import logging
 
 
 def get_csv_by_bot():
@@ -51,20 +51,39 @@ def get_csv_by_bot():
     )
 
     href = download_dataset.get_attribute("href")
-    time.sleep(10)
     driver.get(href)
     time.sleep(10)
+    logging.info("File has been successfully downloaded")
 
     driver.close()
 
 
-def create_or_exists_folder_data():
+def create_or_exists():
     try:
-        os.mkdir('data')
-    except OSError as e:
-        if e.errno != errno.EEXIST:raise
+        folders = ["data", "logs"]
+
+        actual_route = os.getcwd()
+
+        registration_path = os.path.join(actual_route, "logs")
+        os.makedirs(registration_path, exist_ok=True)
+
+        registration_file = os.path.join(registration_path, "register.log")
+        logging.basicConfig(filename=registration_file, level=logging.INFO,
+                            format='%(asctime)s - %(levelname)s - %(message)s')
+
+        for folder in folders:
+            folder_route = os.path.join(actual_route, folder)
+
+            if os.path.exists(folder_route):
+                logging.info(f"The {folder} folder has already been created")
+            else:
+                os.mkdir(folder_route)
+                logging.info(f"The {folder} folder was successfully created")
+
+    except OSError as error:
+        logging.error(f"Error creating {folder} folder: {error}")
 
 
 if __name__ == "__main__":
-    create_or_exists_folder_data()
+    create_or_exists()
     get_csv_by_bot()
