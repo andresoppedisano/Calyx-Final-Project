@@ -1,8 +1,2 @@
 # virtual env
 venv/
-
-# data folder
-data/
-
-# logs folder
-logs/
